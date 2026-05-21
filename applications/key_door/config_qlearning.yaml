@@ -1,0 +1,53 @@
+seed: 0
+
+application:
+  name: key_door
+  entrypoint: applications.key_door.env:KeyDoorEnv
+  visualizer: applications.key_door.visualize:KeyDoorVisualizer
+
+env:
+  minigrid_env_id: MiniGrid-DoorKey-5x5-v0
+  max_steps_override: null
+  reward_wrapper: none
+  action_subset: [left, right, forward, pickup, toggle]
+
+observation:
+  type: multidiscrete_minigrid_symbolic
+  include_agent_position: true
+  include_agent_direction: true
+  include_has_key: true
+  include_door_state: true
+  include_key_position: true
+  include_door_position: true
+  include_goal_position: false
+
+agent:
+  name: q_learning
+  gamma: 0.99
+  learning_rate: 0.1
+  epsilon:
+    type: linear
+    start: 1.0
+    end: 0.05
+    decay_steps: 50000
+
+training:
+  total_steps: 200000
+  eval_interval: 10000
+  eval_episodes: 20
+  log_interval: 1000
+  save_interval: 50000
+  progress_bar: true
+
+visualization:
+  enabled: true
+  interval: 10000
+  episodes: 1
+  format: gif
+  fps: 4
+  max_steps: 200
+
+logging:
+  output_root: outputs
+  run_name: keydoor_qlearning_seed0
+  save_csv: true

@@ -1,0 +1,10 @@
+numpy
+pyyaml
+torch
+matplotlib
+imageio
+pillow
+pytest
+gymnasium
+minigrid
+tqdm
