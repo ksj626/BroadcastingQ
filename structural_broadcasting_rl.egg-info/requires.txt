@@ -7,3 +7,4 @@ pillow
 pytest
 gymnasium
 minigrid
+tqdm

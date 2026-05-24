@@ -25,6 +25,7 @@ AGENT_REGISTRY = {
     "sarsa": "agents.sarsa:SarsaAgent",
     "dqn": "agents.dqn:DQNAgent",
     "anova_q": "agents.anova_q:AnovaQAgent",
+    "sbq": "agents.broadcasting_q:SBQAgent",
 }
 
 
