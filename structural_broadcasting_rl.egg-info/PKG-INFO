@@ -13,6 +13,7 @@ Requires-Dist: pillow
 Requires-Dist: pytest
 Requires-Dist: gymnasium
 Requires-Dist: minigrid
+Requires-Dist: tqdm
 
 # Structural Broadcasting RL
 
@@ -23,6 +24,8 @@ A clean Python reinforcement learning research repository for testing tabular an
 ```bash
 pip install -e .
 ```
+
+DQN uses `device: auto` by default, which selects CUDA when PyTorch reports CUDA is available and otherwise falls back to CPU. Set `agent.device` to `cpu`, `cuda`, or another explicit PyTorch device string to override this.
 
 ## Run KeyDoor Experiments
 
@@ -49,11 +52,13 @@ To add an application:
 
 The KeyDoor application wraps MiniGrid DoorKey through `gymnasium` and `minigrid`. The repository does not manually implement movement, pickup, toggle/open, rewards, termination, truncation, or rendering.
 
-MiniGrid internals are converted into this symbolic `MultiDiscreteSpace` observation:
+MiniGrid internals are converted into a symbolic `MultiDiscreteSpace` observation. The minimal factors are:
 
 ```text
 [agent_row, agent_col, agent_direction, has_key, door_state]
 ```
+
+The provided configs also include key and door positions. This avoids severe state aliasing in tabular agents while keeping the Q-table much smaller than including every object position.
 
 Rendered GIFs and PNGs are generated from MiniGrid RGB frames.
 
