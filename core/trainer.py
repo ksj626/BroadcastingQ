@@ -191,6 +191,8 @@ class Trainer:
         vis_max_steps = int(visualization.get("max_steps", 200))
         eval_max_steps = self.config.get("training", {}).get("eval_max_steps")
         eval_max_steps = None if eval_max_steps is None else int(eval_max_steps)
+        eval_seed = self.config.get("training", {}).get("eval_seed")
+        eval_seed = None if eval_seed is None else int(eval_seed)
         fps = int(visualization.get("fps", 4))
         save_visuals = vis_enabled and self.visualizer is not None and (vis_interval <= 0 or step % vis_interval == 0)
 
@@ -204,7 +206,8 @@ class Trainer:
             )
 
         for episode_idx in episode_iter:
-            obs, _ = self.eval_env.reset()
+            reset_seed = None if eval_seed is None else eval_seed + episode_idx
+            obs, _ = self.eval_env.reset(seed=reset_seed)
             episode_return = 0.0
             frames = []
             done = False
@@ -265,7 +268,7 @@ class Trainer:
         self.metrics_logger.write(row)
 
     def _save_checkpoint(self, step: int) -> None:
-        suffix = ".pt" if self.agent_name == "dqn" else ".npy"
+        suffix = ".pt" if self.agent_name == "dqn" else ".pkl"
         self.agent.save(str(self.output_dir / "checkpoints" / f"agent_step_{step}{suffix}"))
 
     def _save_visualization(self, frames: list[np.ndarray], step: int, episode_idx: int, fps: int) -> None:

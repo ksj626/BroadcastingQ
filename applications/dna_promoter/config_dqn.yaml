@@ -1,0 +1,51 @@
+seed: 0
+
+application:
+  name: dna_promoter
+  entrypoint: applications.dna_promoter.env:DNAPromoterEnv
+  visualizer: applications.dna_promoter.visualize:DNAPromoterVisualizer
+
+env:
+  sequence_length: 6
+  target_sequences: [TATAAT, TATAAA, TATATT, TAAAAT]
+  start_sequence: null
+  avoid_target_start: true
+  max_steps: 20
+
+agent:
+  name: dqn
+  device: auto
+  gamma: 0.99
+  learning_rate: 0.0005
+  batch_size: 64
+  replay_size: 20000
+  warmup_steps: 500
+  target_update_interval: 500
+  hidden_sizes: [128, 128]
+  epsilon:
+    type: linear
+    start: 1.0
+    end: 0.05
+    decay_steps: 40000
+
+training:
+  total_steps: 200000
+  eval_interval: 10000
+  eval_episodes: 200
+  eval_seed: 100000
+  log_interval: 5000
+  save_interval: 50000
+  progress_bar: true
+
+visualization:
+  enabled: true
+  interval: 10000
+  episodes: 1
+  format: gif
+  fps: 4
+  max_steps: 20
+
+logging:
+  output_root: outputs
+  run_name: dna_promoter_dqn_seed0
+  save_csv: true

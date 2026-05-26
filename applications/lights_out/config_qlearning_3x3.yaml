@@ -1,0 +1,47 @@
+seed: 0
+
+application:
+  name: lights_out
+  entrypoint: applications.lights_out.env:LightsOutEnv
+  visualizer: applications.lights_out.visualize:LightsOutVisualizer
+
+env:
+  rows: 3
+  cols: 3
+  start_mode: solvable_scramble
+  scramble_steps: 9
+  action_slip_prob: 0.05
+  avoid_solved_start: true
+  max_steps: 40
+
+agent:
+  name: q_learning
+  gamma: 0.99
+  learning_rate: 0.2
+  epsilon:
+    type: linear
+    start: 1.0
+    end: 0.05
+    decay_steps: 30000
+
+training:
+  total_steps: 100000
+  eval_interval: 5000
+  eval_episodes: 20
+  eval_max_steps: 40
+  log_interval: 500
+  save_interval: 20000
+  progress_bar: true
+
+visualization:
+  enabled: true
+  interval: 5000
+  episodes: 1
+  format: gif
+  fps: 4
+  max_steps: 40
+
+logging:
+  output_root: outputs
+  run_name: lights_out_3x3_qlearning_seed0
+  save_csv: true

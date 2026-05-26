@@ -32,19 +32,19 @@ class QLearningAgent(BaseAgent):
         if explore and self.rng.random() < self.epsilon:
             return self.action_space.sample(self.rng)
         state_idx = self.observation_space.to_index(obs)
-        return int(np.argmax(self.q_table.values[state_idx]))
+        return int(np.argmax(self.q_table.row(state_idx)))
 
     def update(self, transition: Transition) -> dict:
         state = self.observation_space.to_index(transition.obs)
         next_state = self.observation_space.to_index(transition.next_obs)
-        current = float(self.q_table.values[state, transition.action])
-        bootstrap = 0.0 if transition.done else float(np.max(self.q_table.values[next_state]))
+        current = self.q_table.get(state, transition.action)
+        bootstrap = 0.0 if transition.done else float(np.max(self.q_table.row(next_state)))
         target = float(transition.reward + self.gamma * bootstrap)
         td_error = target - current
-        self.q_table.values[state, transition.action] += self.learning_rate * td_error
+        q_value = self.q_table.add(state, transition.action, self.learning_rate * td_error)
         return {
             "td_error": float(td_error),
-            "q_value": float(self.q_table.values[state, transition.action]),
+            "q_value": q_value,
             "target": target,
         }
 
