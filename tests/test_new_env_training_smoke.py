@@ -72,6 +72,33 @@ def test_q_learning_lights_out_4x4_training_smoke(tmp_path):
     assert (output_dir / "eval_metrics.csv").exists()
 
 
+def test_dqn_lights_out_4x4_training_smoke(tmp_path):
+    config = load_yaml("applications/lights_out/config_dqn_4x4.yaml")
+    config["agent"]["device"] = "cpu"
+    config["agent"]["batch_size"] = 2
+    config["agent"]["warmup_steps"] = 2
+    config["agent"]["replay_size"] = 16
+    config["training"]["total_steps"] = 8
+    config["training"]["eval_interval"] = 4
+    config["training"]["eval_episodes"] = 1
+    config["training"]["log_interval"] = 4
+    config["training"]["save_interval"] = 0
+    config["training"]["progress_bar"] = False
+    config["visualization"]["enabled"] = False
+    config["logging"]["output_root"] = str(tmp_path)
+    config["logging"]["run_name"] = "smoke_lights_4x4_dqn"
+
+    rng = set_global_seed(config["seed"])
+    env = build_env(config)
+    agent = build_agent(config, env, rng)
+    visualizer = build_visualizer(config)
+    trainer = Trainer(config, env, agent, rng, visualizer=visualizer)
+    output_dir = trainer.train()
+
+    assert (output_dir / "metrics.csv").exists()
+    assert (output_dir / "eval_metrics.csv").exists()
+
+
 def test_q_learning_lights_out_5x5_sparse_training_smoke(tmp_path):
     config = load_yaml("applications/lights_out/config_qlearning_5x5.yaml")
     config["training"]["total_steps"] = 6

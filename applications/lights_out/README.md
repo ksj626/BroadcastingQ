@@ -15,8 +15,9 @@ python main.py --config applications/lights_out/config_qlearning_3x3.yaml
 python main.py --config applications/lights_out/config_qlearning_4x4.yaml
 python main.py --config applications/lights_out/config_qlearning_5x5.yaml
 python main.py --config applications/lights_out/config_sarsa_3x3.yaml
+python main.py --config applications/lights_out/config_dqn_4x4.yaml
 python main.py --config applications/lights_out/config_dqn_5x5.yaml
 ```
 
-The 4x4 Q-learning config is the stronger tabular baseline. The 3x3 config is kept for fast smoke tests.
+The 4x4 configs are the stronger tabular/DQN sanity baselines. The 3x3 config is kept for fast smoke tests.
 The 5x5 Q-learning config uses the sparse table implementation, so it does not allocate `2^25 * 25` action values up front.
