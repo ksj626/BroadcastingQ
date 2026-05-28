@@ -2,3 +2,6 @@ outputs/*
 .venv/
 __pycache__/
 *.py[cod]
+26_5_17.pdf
+temp/
+venv/
